@@ -1,5 +1,5 @@
 import json
-import os, base64
+import time, base64
 
 
 class img_pre_proc():
@@ -18,9 +18,10 @@ class img_pre_proc():
 
 	def json_for_img(self, encoded_str):
 		data = {}
-		data['data'] = encoded_str
+		data['timestamp'] = time.time_ns()
 		data['compression'] = self.compression
 		data['encoding'] = self.encoding
+		data['data'] = encoded_str
 		return json.dumps(data)
 		
 
