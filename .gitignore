@@ -9,6 +9,8 @@ ignore/*
 */__pycache__/*
 */migrations/
 */migrations/*
+/sample-data/raw/
+/sample-data/raw/*
 
 # ingore secret config such as secret key. create folder in server
 config_files/
