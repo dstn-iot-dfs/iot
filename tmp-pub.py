@@ -1,25 +1,32 @@
+from asyncio.log import logger
 import paho.mqtt.client	#import client library
 import time,os
 from config import config
 from img_proc import img_pre_proc
+import logging
 
+logging.basicConfig(filename="pub.log",format='%(asctime)s %(message)s',
+                    filemode='w')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+#fns for client
+def on_connect(client, userdata, flags, rc):
+	if rc == 0:
+		# publisher.connected = True
+		logger.debug("connected ok")
+	else:
+		# publisher.connected = False
+		logger.error("connnection failed with code: ", rc)
+def on_publish(client, userdata, result):
+	print(result)
+	logger.debug("published")
+def on_disconnect(client, userdata, rc):
+	# publisher.connected = False
+	logger.debug("client disconnected")
 
 class mqtt_publisher():
 	mqtt_port = config.mqtt_port
-	#fns for client
-	def on_connect(client, userdata, flags, rc):
-		if rc == 0:
-			# publisher.connected = True
-			print("connected ok")
-		else:
-			# publisher.connected = False
-			print("connnection failed with code: ", rc)
-	def on_publish(client, userdata, result):
-		print(result)
-		print("published")
-	def on_disconnect(client, userdata, rc):
-		# publisher.connected = False
-		print("client disconnected")
 	
 	def __init__(self, broker_ip, topic, client_name, delay):
 		self.broker_ip = broker_ip
@@ -33,10 +40,11 @@ class mqtt_publisher():
 
 	def setup(self):
 		self.client = paho.mqtt.client.Client(self.client_name)
-		self.client.on_connect = mqtt_publisher.on_connect  #bind call back function
-		self.client.on_publish = mqtt_publisher.on_publish
-		self.client.on_disconnect = mqtt_publisher.on_disconnect
+		self.client.on_connect = on_connect  #bind call back function
+		self.client.on_publish = on_publish
+		self.client.on_disconnect = on_disconnect
 		self.client.connect(self.broker_ip, port=mqtt_publisher.mqtt_port)
+		logger.debug(str('attempting connection to' + self.broker_ip))
 
 	def conn_active(self):
 		# todo
@@ -49,6 +57,7 @@ class mqtt_publisher():
 			time.sleep(2)
 		
 		self.client.publish(topic=self.topic,payload=payload,qos=2)
+		logger.debug('attempting publish')
 
 	def disconnect(self):
 		self.client.disconnect()
