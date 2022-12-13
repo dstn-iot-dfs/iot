@@ -24,7 +24,6 @@ class img_pre_proc():
 		data['data'] = encoded_str
 		return json.dumps(data)
 		
-
 	def preproc_and_get_json(self,path):
 		raw_bytes = self.read_raw_img(path)
 		encoded_str = self.encode_b64(raw_bytes)
