@@ -6,6 +6,6 @@ class config():
 	mqtt_topic = "img"
 	mqtt_port = 1883
 	mqtt_client_name = "camera_device0"
-
+	cutoff_strength = 60
 	img_xmit_time = 5 #time after which xmit in s
 
