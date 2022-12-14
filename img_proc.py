@@ -3,9 +3,10 @@ import time, base64
 
 
 class img_pre_proc():
-	def __init__(self, encoding, compression):
+	def __init__(self, encoding, compression, device_id):
 		self.encoding = encoding
 		self.compression = compression
+		self.device_id = device_id
 
 	def read_raw_img (self,path):
 		in_fh = open(path, "rb") #get raw byte data
@@ -18,9 +19,10 @@ class img_pre_proc():
 
 	def json_for_img(self, encoded_str):
 		data = {}
-		data['timestamp'] = time.time_ns()
-		data['compression'] = self.compression
-		data['encoding'] = self.encoding
+		data['id'] = self.device_id
+		data['ts'] = time.time_ns()
+		data['compr'] = self.compression
+		data['enc'] = self.encoding
 		data['data'] = encoded_str
 		return json.dumps(data)
 		

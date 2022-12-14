@@ -5,7 +5,7 @@ class config():
 	mqtt_borker_ip = "localhost"
 	mqtt_topic = "img"
 	mqtt_port = 1883
-	mqtt_client_name = "camera_device0"
+	mqtt_client_name = "cam0"
 	queue_size_limit = 5
 	cutoff_strength = 60
 	max_timeouts = 1000

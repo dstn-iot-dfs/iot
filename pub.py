@@ -7,11 +7,11 @@ from queue import Queue
 
 # Global vars
 q = Queue(maxsize=config.queue_size_limit)
-img_proc = img_pre_proc(encoding='b64', compression='')
+img_proc = img_pre_proc(encoding='b64', compression='',device_id=config.mqtt_client_name)
 
 # MQTT setup
-client = paho.mqtt.client.Client("cam1")			 #create new instance 
-client.on_connect = on_connect  #bind call back function
+client = paho.mqtt.client.Client("cam1")
+client.on_connect = on_connect
 client.on_publish = on_publish
 client.on_disconnect = on_disconnect
 print('attempting to connect')
