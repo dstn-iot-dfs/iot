@@ -49,7 +49,7 @@ while True:
 	lock.release()
 
 	print("attempting publish")
-	client.publish(topic="img",payload=payload,qos=0)
+	client.publish(topic="img",payload=payload,qos=2)
 	time.sleep(config.img_xmit_time )
 
 load_data_thr.join()
