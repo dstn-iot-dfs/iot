@@ -32,8 +32,7 @@ while True:
 	while (weak):
 		time.sleep(1)
 		timeout_cnt += 1
-		print("debug wait: ", weak)
-		print("wating better signal, current strength = ",quality,"%")
+		print("wating for better signal, current strength = ",quality,"%")
 		if timeout_cnt == config.max_timeouts: 
 			break
 		weak, quality = is_network_weak()
