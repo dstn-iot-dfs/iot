@@ -69,7 +69,7 @@ def load_data(lock, queue, img_proc):
 		if(queue.full()):
 			print("q full, dequeuing one element")
 			queue.get()
-		payload = img_proc.json_for_img(base_path+img)
+		payload = img_proc.preproc_and_get_json(base_path+img)
 		queue.put(payload)
 		lock.release()
 		print("waiting for next img, queue size: ", queue.qsize())

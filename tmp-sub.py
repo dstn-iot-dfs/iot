@@ -4,4 +4,4 @@ from config import config
 while 1:
 	msg = subscribe.simple("img", hostname=config.mqtt_borker_ip)
 	obj = json.loads(msg.payload)
-	print(msg.payload[:100])
+	print(msg.payload[:100], len(msg.payload))
