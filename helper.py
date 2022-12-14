@@ -2,6 +2,7 @@ import subprocess, time
 import re, os, threading
 from config import config
 from img_proc import img_pre_proc
+from queue import Queue
 
 # Signal check ##############################
 
@@ -59,9 +60,11 @@ def on_disconnect(client, userdata, rc):
 
 # Data Loader ##############################
 
-def load_data(lock, queue, img_proc):
+def load_data(lock, queue:Queue, img_proc:img_pre_proc):
 	base_path = './sample-data/raw/'
-	img = os.listdir(base_path)[0]
+	imgs = os.listdir(base_path)
+	num_imgs = len(imgs)
+	count = 0
 	while True:
 		time.sleep(config.img_gen_time )
 		lock.acquire()
@@ -69,9 +72,10 @@ def load_data(lock, queue, img_proc):
 		if(queue.full()):
 			print("q full, dequeuing one element")
 			queue.get()
-		payload = img_proc.preproc_and_get_json(base_path+img)
+		payload = img_proc.preproc_and_get_json(base_path+imgs[(count+1)%num_imgs])
 		queue.put(payload)
 		lock.release()
+		count += 1 
 		print("waiting for next img, queue size: ", queue.qsize())
 
 if __name__ == '__main__':
