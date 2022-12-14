@@ -1,3 +1,4 @@
+import platform
 import subprocess, time
 import re, os, threading
 from config import config
@@ -7,9 +8,15 @@ from queue import Queue
 # Signal check ##############################
 
 def read_data_from_cmd(): # inspired from https://github.com/s7jones/Wifi-Signal-Plotter
-	p = subprocess.Popen("iwconfig", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out = p.stdout.read().decode()
-	m = re.findall('Signal level=(-[0-9]+) dBm', out, re.DOTALL)
+	if platform.system() == 'Linux':
+		p = subprocess.Popen("iwconfig", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		out = p.stdout.read().decode()
+		m = re.findall('Signal level=(-[0-9]+) dBm', out, re.DOTALL)
+	else:
+		command = ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport","-I","en0"]
+		p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		out = p.stdout.read().decode()
+		m = re.findall('agrCtlRSSI: (-[0-9]+)', out, re.DOTALL)
 	p.communicate()
 	if len(m)==0 :
 		return -100
